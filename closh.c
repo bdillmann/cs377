@@ -61,8 +61,9 @@ int main() {
 	int id;	//  ID of the process
 	while (count--) { //  Execute count times, 0 == false
 		id = fork();
-		if (id != 0) { //  This is the parent process
-			waitpid(id, 0, 0); //  Wait for children to finish
+		if (id) { //  This is the parent process
+			sleep(timeout); // waits timout seconds
+			kill(id, SIGTERM); // kills process if still alive after timeout
 		} else { //  Must be the child process
 			execvp(cmdTokens[0], cmdTokens); // replaces the current process with the given program
 			printf("Can't execute %s\n", cmdTokens[0]); // only reached if running the program failed
